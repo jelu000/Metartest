@@ -16,6 +16,7 @@ public class MetarTest {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        MetarData mt = new MetarData();
     }
     
 }
