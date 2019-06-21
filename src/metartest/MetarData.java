@@ -53,8 +53,8 @@ public class MetarData {
             con.setRequestProperty("User-Agent", USER_AGENT);
 
             int responseCode = con.getResponseCode();
-            System.out.println("\nSending 'GET' request to URL : " + url);
-            System.out.println("Response Code : " + responseCode);
+            //System.out.println("\nSending 'GET' request to URL : " + url);
+            //System.out.println("Response Code : " + responseCode);
 
             
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -66,8 +66,7 @@ public class MetarData {
             }
             in.close();
 
-            //print result
-            System.out.println(response.toString() + "\n\n-----------------");
+            //System.out.println(response.toString() + "\n\n-----------------");
             setVariables(response.toString());
 
         
@@ -75,16 +74,17 @@ public class MetarData {
         catch(Exception e){
             System.out.println("RequestError=" + e);
         }
-    
-    
     }
     
     
     private void setVariables(String t_metar){
         String[] t_split = t_metar.split(" ");
-        //[0-9]*KT
-        Pattern p = Pattern.compile("[0-9][0-9]/[0-9][0-9]");
-        Pattern p2 = Pattern.compile("[0-9]*KT");
+        
+        datum = t_split[0];//datum
+        tid = t_split[1];//tid
+                       
+        Pattern p = Pattern.compile("[0-9][0-9]/[0-9][0-9]");//get the temperatur
+        Pattern p2 = Pattern.compile("[0-9]*KT");//get the winddir and speed //[0-9]*KT
 
         for (String t_value: t_split){
             //System.out.println(t_value);
@@ -101,5 +101,92 @@ public class MetarData {
                 vindspeed = t_value;
             }
         }
+    
+        //System.out.println("\n"+ datum +"\n"+ tid +"\n"+ temperatur +"\n"+ vindspeed);
     }
+    
+    public int getTemperatur(){
+    
+        String t_temparray[]= temperatur.split("/");
+        float t_temp = Float.parseFloat(t_temparray[0]);
+        t_temp *= 0.514;
+        int t_w = Math.round(t_temp);
+        
+        return t_w;
+        
+    }
+    
+    public String getDate(){
+        return datum;
+    
+    }
+    
+   public String getTime(){
+       return tid.substring(0, 5);
+   
+   }
+   
+   public String getAirport(){
+       return tid.substring(5, 9);
+   }
+   
+   public String gettWindDirection(){
+       
+       int t_grader = Integer.parseInt(vindspeed.substring(0, 3));
+       
+       String t_winddir ="";
+
+       if (t_grader>=0 && t_grader<=12)
+          t_winddir="N";
+
+       else if (t_grader>=13 && t_grader<=34)
+          t_winddir="N NO";
+
+       else if (t_grader>=35 && t_grader<=56)
+          t_winddir="NO";
+
+       else if (t_grader>=57 && t_grader<=78)
+          t_winddir="O NO";
+
+       else if (t_grader>=79 && t_grader<=102)
+          t_winddir="O";
+
+       else if (t_grader>=103 && t_grader<=124)
+          t_winddir="O SO";
+
+       else if (t_grader>=125 && t_grader<=146)
+          t_winddir="SO";
+
+       else if (t_grader>=147 && t_grader<=168)
+          t_winddir="S SO";
+
+       else if (t_grader>=169 && t_grader<=192)
+          t_winddir="S";
+
+       else if (t_grader>=193 && t_grader<=214)
+          t_winddir="S SV";
+
+       else if (t_grader>=215 && t_grader<=236)
+          t_winddir="SV";
+
+       else if (t_grader>=237 && t_grader<=258)
+          t_winddir="V SV";
+
+       else if (t_grader>=259 && t_grader<=282)
+          t_winddir="V";
+
+       else if (t_grader>=283 && t_grader<=304)
+          t_winddir="V NV";
+
+       else if (t_grader>=305 && t_grader<=326)
+          t_winddir="NV";
+
+       else if (t_grader>=327 && t_grader<=347)
+          t_winddir="N NV";
+
+       else if (t_grader>=348 && t_grader<=360)
+          t_winddir="N";
+
+       return t_winddir;
+   }
 }
