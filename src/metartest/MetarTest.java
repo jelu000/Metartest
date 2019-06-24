@@ -16,15 +16,28 @@ public class MetarTest {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
+        if (args.length == 0){ 
         MetarData mt = new MetarData();
+        mt.printWeather();
+       
+        }
         
-        System.out.println("\n\n.:Flygplats: " +  mt.getAirport()+ ":.");
-        System.out.println("------------------------");
-        System.out.println("Datum: " +  mt.getDate());
-        System.out.println("Tid: " +  mt.getTime());
-        System.out.println("Vindstyrka: " +  mt.getTemperatur() + " m/s");
-        System.err.println("Vindriktning: " + mt.gettWindDirection() +"\n------------------------");
+        else{
+            System.out.println("Args 0 =" + args[0]);
+            try{
+                
+                
+                MetarData mt = new MetarData(args[0]);
+                mt.printWeather();
+               
+            }
+            catch(Exception e){
+                System.out.println("Kunde inte hitta ICAO kod förflygplats!");
+            
+            }
+        
+        }
+        
     }
     
 }

@@ -11,6 +11,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.text.*;
+
 
 /**
  *
@@ -27,14 +29,14 @@ public class MetarData {
     
     
     public MetarData(){
-        String t_airport = "ESNZ.TXT";
         
+        String t_airport = "ESNZ.TXT";
         getHttpMetar(t_airport);
     }
     
     public MetarData(String t_airport ){
-    
-    
+        t_airport = t_airport + ".TXT";
+        getHttpMetar(t_airport);
     }
     
     
@@ -130,6 +132,22 @@ public class MetarData {
        return tid.substring(5, 9);
    }
    
+   public  String getWindspeed(){
+        
+       String t_vindspeed = vindspeed; 
+       t_vindspeed = t_vindspeed.substring(3,5);
+       
+      
+       Double t_speed = Double.parseDouble(t_vindspeed);
+       NumberFormat formatter = new DecimalFormat("#0.00");     
+
+       t_speed = t_speed*0.5144;
+       String t_string = new String(formatter.format(t_speed));
+       
+       return t_string;
+   
+   }
+   
    public String gettWindDirection(){
        
        int t_grader = Integer.parseInt(vindspeed.substring(0, 3));
@@ -189,4 +207,18 @@ public class MetarData {
 
        return t_winddir;
    }
+   
+   public void printWeather(){
+        System.out.println("\n\n.:Flygplats: " +  getAirport()+ ":.");
+        System.out.println("------------------------");
+        System.out.println("Datum: " +  getDate());
+        System.out.println("Tid: " +  getTime());
+        
+        System.out.println("Temperatur: " +  getTemperatur() + " c\u00B0");
+        System.out.println("Vindstyrka: " +  getWindspeed()+ " m/s");
+        System.err.println("Vindriktning: " + gettWindDirection() +"\n------------------------");
+   
+   }
+          
+   
 }
