@@ -12,7 +12,9 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.text.*;
-
+import java.util.Date;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 /**
  *
@@ -26,7 +28,8 @@ public class MetarData {
     private String temperatur;
     private String vindspeed;
     private String string_url = "https://tgftp.nws.noaa.gov/data/observations/metar/stations/";
-    
+    private String gmt_time;
+    private String gmt_date;
     
     public MetarData(){
         
@@ -69,8 +72,8 @@ public class MetarData {
             in.close();
 
             //System.out.println(response.toString() + "\n\n-----------------");
-            setVariables(response.toString());
-
+            setVariables(response.toString());//sätter först Globala variabler från metar tag med UTC tidszon
+            setGmtTime();//Skapar globala variabler för GMT tidszon
         
         }
         catch(Exception e){
@@ -106,6 +109,34 @@ public class MetarData {
     
         //System.out.println("\n"+ datum +"\n"+ tid +"\n"+ temperatur +"\n"+ vindspeed);
     }
+     private String setGmtTime(){
+        String t_tid = tid.substring(0, 5);
+        String[] t_tim_min = t_tid.split(":");
+        
+       
+       Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+               
+       cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(t_tim_min[0]));
+       cal.set(Calendar.MINUTE, Integer.parseInt(t_tim_min[1]));
+       
+       String[] t_year_month = datum.split("/");
+       
+       cal.set(Calendar.YEAR, Integer.parseInt(t_year_month[0]));
+       cal.set(Calendar.MONTH, Integer.parseInt(t_year_month[1]));
+       cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(t_year_month[2]));
+       
+       cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+       
+       SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
+       SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+       
+       gmt_time = sdf1.format(cal.getTime());
+       
+       gmt_date = sdf2.format(cal.getTime());
+       
+       return tid.substring(0, 5);
+   
+   }
     
     public int getTemperatur(){
     
@@ -118,15 +149,18 @@ public class MetarData {
         
     }
     
-    public String getDate(){
-        return datum;
+    public String getGmtDate(){
+        return gmt_date;
     
     }
     
-   public String getTime(){
-       return tid.substring(0, 5);
-   
-   }
+    public String getGmtTime(){
+        return gmt_time;
+    
+    }
+    
+    
+  
    
    public String getAirport(){
        return tid.substring(5, 9);
@@ -211,8 +245,8 @@ public class MetarData {
    public void printWeather(){
         System.out.println("\n\n.:Flygplats: " +  getAirport()+ ":.");
         System.out.println("------------------------");
-        System.out.println("Datum: " +  getDate());
-        System.out.println("Tid: " +  getTime());
+        System.out.println("Datum: " +  getGmtDate());
+        System.out.println("Tid: " +  getGmtTime());
         
         System.out.println("Temperatur: " +  getTemperatur() + " c\u00B0");
         System.out.println("Vindstyrka: " +  getWindspeed()+ " m/s");
