@@ -5,7 +5,7 @@ package metartest;
 
 /**
  *
- * @author jens
+ * @author jens Lundeqvist
  */
 public class MetarTest {
 
