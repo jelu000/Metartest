@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * License FREE
  */
 package metartest;
 
@@ -31,12 +29,20 @@ public class MetarData {
     private String gmt_time;
     private String gmt_date;
     
+    /**
+     * MetarData
+     * Set data for Östersundsflygplats ICAO_kod ESNZ
+     */
     public MetarData(){
         
         String t_airport = "ESNZ.TXT";
         getHttpMetar(t_airport);
     }
-    
+    /**
+     * MetarData
+     * Set data for Airport with specifik ICAO_kod
+     * In: ICAO_kod
+     */
     public MetarData(String t_airport ){
         t_airport = t_airport + ".TXT";
         getHttpMetar(t_airport);
@@ -137,7 +143,10 @@ public class MetarData {
        return tid.substring(0, 5);
    
    }
-    
+    /**
+     * getTemperatur()
+     * @return int temperatur
+     */
     public int getTemperatur(){
     
         String t_temparray[]= temperatur.split("/");
@@ -149,23 +158,34 @@ public class MetarData {
         
     }
     
+    /**
+     * getGmtDate()
+     * @return String gmt_date
+     */
     public String getGmtDate(){
         return gmt_date;
     
     }
-    
+    /**
+     * getGmtTime()
+     * @return String gmt_time
+     */
     public String getGmtTime(){
         return gmt_time;
     
     }
-    
-    
-  
-   
+   /**
+     * getAirport()
+     * @return String ICAO_kod
+     */
    public String getAirport(){
        return tid.substring(5, 9);
    }
    
+   /**
+     * getWindspeed()
+     * @return String windspeed 
+     */
    public  String getWindspeed(){
         
        String t_vindspeed = vindspeed; 
@@ -181,7 +201,10 @@ public class MetarData {
        return t_string;
    
    }
-   
+   /**
+     * getWindDirection()
+     * @return String wind_direction
+     */
    public String gettWindDirection(){
        
        int t_grader = Integer.parseInt(vindspeed.substring(0, 3));
@@ -241,7 +264,10 @@ public class MetarData {
 
        return t_winddir;
    }
-   
+   /**
+     * getGmtTime()
+     * printout the wheather for airport
+     */
    public void printWeather(){
         System.out.println("\n\n.:Flygplats: " +  getAirport()+ ":.");
         System.out.println("------------------------");
