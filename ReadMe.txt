@@ -11,6 +11,9 @@ Om man istället vill visa vädret för en annan flygplats exempel Malmös flygp
 Då skriver dus så här:
 java -jar MetarTest.jar ESMS
 
+Om du vill använda andra ICAO koder så finns de några här:
+https://sv.wikipedia.org/wiki/Lista_%C3%B6ver_flygplatser_i_Sverige
+
 
 Givetvis kan du använda classen MetarData.java och dess metoder för att bygga in i ett eget Javaprogram om du vill och de står dig fritt. 
 
